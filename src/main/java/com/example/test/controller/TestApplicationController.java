@@ -1,11 +1,13 @@
 package com.example.test.controller;
 
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +21,9 @@ import com.example.test.service.RegisterService;
 @RequestMapping("/home")
 public class TestApplicationController {
 
+  @Autowired
+  private ApplicationContext context;
+  
   @Autowired 
   private RegisterService registerService;
   
@@ -61,4 +66,16 @@ public class TestApplicationController {
     registerService.deleteById(id);
     return "Data Updated Successfully";
   }
+  
+  private Locale getLocale() {
+    return LocaleContextHolder.getLocale();
+  }
+  
+  @GetMapping("/checkLocalization")
+  public String checkLocalization() {
+    String arg0 = "field1";
+    String message = this.context.getMessage(arg0, null, getLocale());
+    return message;
+  }
+  
 }
